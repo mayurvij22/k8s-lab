@@ -14,11 +14,12 @@ spec:
     spec:
       containers:
       - name: orders
-        image: busybox:1.37
+        image: ghcr.io/mayurvij22/orders:1.0
+        imagePullPolicy: Always
         command: ["sh", "-c"]
         args:
           - |
-            echo "orders-service v3 starting..."
+            echo "orders-service v4 starting..."
             if [ -z "$DB_HOST" ]; then
               echo "FATAL: environment variable DB_HOST is not set"
               exit 1
