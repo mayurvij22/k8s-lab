@@ -14,17 +14,23 @@ spec:
     spec:
       containers:
       - name: orders
-        image: ghcr.io/mayurvij22/orders:1.0
-        imagePullPolicy: Always
+        image: busybox:1.37
         command: ["sh", "-c"]
         args:
           - |
-            echo "orders-service v4 starting..."
+            echo "orders-service v5 starting..."
             if [ -z "$DB_HOST" ]; then
               echo "FATAL: environment variable DB_HOST is not set"
               exit 1
             fi
             echo "Connected to database at $DB_HOST"
+            echo "Loading product catalog into memory..."
+            for mb in 10 20 30 40 50 70 90 120; do
+              echo "  loading catalog chunk: ${mb}MB"
+              dd if=/dev/zero of=/dev/null bs=${mb}M count=1 2>/dev/null
+              sleep 2
+            done
+            echo "Catalog loaded"
             touch /tmp/ready
             while true; do sleep 30; done
         env:
