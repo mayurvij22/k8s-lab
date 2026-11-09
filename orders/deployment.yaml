@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: orders
-        image: busybox:1.73
+        image: busybox:1.37
         command: ["sh", "-c"]
         args:
           - |
