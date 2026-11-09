@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/mayurvij22/k8s-lab
-    targetRevision: main
+    repoURL: https://github.com/mayurvij22/k8s-lab.git
+    targetRevision: master
     path: orders
   destination:
     server: https://kubernetes.default.svc
