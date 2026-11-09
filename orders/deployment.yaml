@@ -18,7 +18,7 @@ spec:
         command: ["sh", "-c"]
         args:
           - |
-            echo "orders-service v2 starting..."
+            echo "orders-service v2.1 starting..."
             if [ -z "$DB_HOST" ]; then
               echo "FATAL: environment variable DB_HOST is not set"
               exit 1
@@ -27,7 +27,7 @@ spec:
             touch /tmp/ready
             while true; do sleep 30; done
         env:
-        - name: DATABASE_HOST
+        - name: DB_HOST
           value: "postgres.db.svc.cluster.local"
         readinessProbe:
           exec:
