@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
       - name: orders
-        image: busybox:1.36
+        image: busybox:1.73
         command: ["sh", "-c"]
         args:
           - |
-            echo "orders-service v2.1 starting..."
+            echo "orders-service v3 starting..."
             if [ -z "$DB_HOST" ]; then
               echo "FATAL: environment variable DB_HOST is not set"
               exit 1
