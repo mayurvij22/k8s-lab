@@ -5,7 +5,7 @@ metadata:
   namespace: orders
 spec:
   selector:
-    app: order-svc
+    app: order
   ports:
   - port: 80
     targetPort: 8080
