@@ -32,7 +32,7 @@ spec:
           value: "postgres.db.svc.cluster.local"
         readinessProbe:
           exec:
-            command: ["test", "-f", "/tmp/healthz"]
+            command: ["test", "-f", "/tmp/ready"]
           initialDelaySeconds: 3
           periodSeconds: 5
         resources:
