@@ -42,5 +42,5 @@ spec:
           initialDelaySeconds: 3
           periodSeconds: 5
         resources:
-          requests: { memory: "16Mi", cpu: "10m" }
-          limits:   { memory: "64Mi" }
+          requests: { memory: "64Gi", cpu: "10m" }
+          limits:   { memory: "64Gi" }
