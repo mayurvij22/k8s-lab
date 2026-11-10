@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: payments
 spec:
-  replicas: 20
+  replicas: 1
   selector:
     matchLabels:
       app: payments
@@ -19,17 +19,14 @@ spec:
         args:
           - |
             echo "payments-service starting (SLOW MODE)..."
-            mkdir -p /cgi-bin
-            cat > /cgi-bin/default << 'EOF'
-            #!/bin/sh
-            sleep 30
-            echo "Content-Type: text/plain"
-            echo ""
-            echo "payment OK"
-            EOF
-            chmod +x /cgi-bin/default
+            mkdir -p /www
+            echo "payment OK (after delay)" > /www/index.html
             touch /tmp/ready
-            httpd -f -p 8080 -h /dev/null
+            echo "Listening on port 8080 with 30s response delay..."
+            while true; do
+              echo -e "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\npayment OK" | nc -l -p 8080 -w 30 > /dev/null 2>&1
+              sleep 30
+            done
         readinessProbe:
           exec:
             command: ["test", "-f", "/tmp/ready"]
