@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments
+  template:
+    metadata:
+      labels:
+        app: payments
+    spec:
+      containers:
+      - name: payments
+        image: busybox:1.37
+        command: ["sh", "-c"]
+        args:
+          - |
+            echo "payments-service starting (SLOW MODE)..."
+            mkdir -p /cgi-bin
+            cat > /cgi-bin/default << 'EOF'
+            #!/bin/sh
+            sleep 30
+            echo "Content-Type: text/plain"
+            echo ""
+            echo "payment OK"
+            EOF
+            chmod +x /cgi-bin/default
+            touch /tmp/ready
+            httpd -f -p 8080 -h /dev/null
+        readinessProbe:
+          exec:
+            command: ["test", "-f", "/tmp/ready"]
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        resources:
+          requests: { memory: "16Mi", cpu: "10m" }
+          limits:   { memory: "64Mi" }

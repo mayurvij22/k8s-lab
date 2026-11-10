@@ -18,17 +18,15 @@ spec:
         command: ["sh", "-c"]
         args:
           - |
-            echo "orders-service v11 starting..."
-            echo "Connecting to payments service..."
-            if ! nslookup payments.payments.svc.cluster.local > /dev/null 2>&1; then
-              echo "FATAL: cannot resolve payments service"
-              echo "DNS lookup failed for: payments.payments.svc.cluster.local"
-              exit 1
-            fi
-            echo "Payments service found"
+            echo "orders-service v12 starting..."
             mkdir -p /www
-            echo "OK" > /www/index.html
+            cat > /www/index.html << 'SCRIPT'
+            orders: checking payments...
+            SCRIPT
             touch /tmp/ready
+            echo "Service ready, testing payments connectivity..."
+            RESULT=$(wget -qO- --timeout=3 http://payments.orders.svc.cluster.local 2>&1) || true
+            echo "Payments response: $RESULT"
             httpd -f -p 8080 -h /www
         readinessProbe:
           exec:
