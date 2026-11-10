@@ -18,38 +18,16 @@ spec:
         command: ["sh", "-c"]
         args:
           - |
-            echo "orders-service v9 starting..."
-            if [ -z "$DB_HOST" ]; then
-              echo "FATAL: environment variable DB_HOST is not set"
-              exit 1
-            fi
-            echo "Connected to database at $DB_HOST"
-            echo "Loading slow config (takes ~20 seconds)..."
-            sleep 20
-            echo "Config loaded, service ready"
+            echo "orders-service v10 starting..."
+            mkdir -p /www
+            echo "OK" > /www/index.html
             touch /tmp/ready
-            touch /tmp/alive
-            while true; do sleep 30; done
-        env:
-        - name: DB_HOST
-          value: "postgres.db.svc.cluster.local"
+            httpd -f -p 8080 -h /www
         readinessProbe:
           exec:
             command: ["test", "-f", "/tmp/ready"]
           initialDelaySeconds: 3
           periodSeconds: 5
-        livenessProbe:
-          exec:
-            command: ["test", "-f", "/tmp/alive"]
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          failureThreshold: 2
         resources:
           requests: { memory: "16Mi", cpu: "10m" }
           limits:   { memory: "64Mi" }
-        startupProbe:
-          exec: 
-            command: ["test", "-f", "/tmp/alive"]
-        periodSeconds: 5
-        failureThreshold: 12
-          
