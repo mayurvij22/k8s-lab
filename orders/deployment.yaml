@@ -18,14 +18,17 @@ spec:
         command: ["sh", "-c"]
         args:
           - |
-            echo "orders-service v8 starting..."
+            echo "orders-service v9 starting..."
             if [ -z "$DB_HOST" ]; then
               echo "FATAL: environment variable DB_HOST is not set"
               exit 1
             fi
             echo "Connected to database at $DB_HOST"
-            echo "Service is up and processing orders"
+            echo "Loading slow config (takes ~20 seconds)..."
+            sleep 20
+            echo "Config loaded, service ready"
             touch /tmp/ready
+            touch /tmp/alive
             while true; do sleep 30; done
         env:
         - name: DB_HOST
@@ -35,6 +38,12 @@ spec:
             command: ["test", "-f", "/tmp/ready"]
           initialDelaySeconds: 3
           periodSeconds: 5
+        livenessProbe:
+          exec:
+            command: ["test", "-f", "/tmp/alive"]
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 2
         resources:
           requests: { memory: "16Mi", cpu: "10m" }
           limits:   { memory: "64Mi" }
