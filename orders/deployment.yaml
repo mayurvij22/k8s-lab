@@ -43,4 +43,4 @@ spec:
           periodSeconds: 5
         resources:
           requests: { memory: "16Mi", cpu: "10m" }
-          limits:   { memory: "64Mi" }
+          limits:   { memory: "256Mi" }
