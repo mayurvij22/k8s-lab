@@ -18,7 +18,14 @@ spec:
         command: ["sh", "-c"]
         args:
           - |
-            echo "orders-service v10 starting..."
+            echo "orders-service v11 starting..."
+            echo "Connecting to payments service..."
+            if ! nslookup payments.payments.svc.cluster.local > /dev/null 2>&1; then
+              echo "FATAL: cannot resolve payments service"
+              echo "DNS lookup failed for: payments.payments.svc.cluster.local"
+              exit 1
+            fi
+            echo "Payments service found"
             mkdir -p /www
             echo "OK" > /www/index.html
             touch /tmp/ready
