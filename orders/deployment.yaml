@@ -47,3 +47,9 @@ spec:
         resources:
           requests: { memory: "16Mi", cpu: "10m" }
           limits:   { memory: "64Mi" }
+        startupProbe:
+          exec: 
+            command: ["test", "-f", "/tmp/alive"]
+        periodSeconds: 5
+        failureThreshold: 12
+          
